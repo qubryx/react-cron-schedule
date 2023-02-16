@@ -1,0 +1,54 @@
+@media only screen and (min-width: 641px) {
+    .container {
+        display:flex;
+        flex-direction: row;
+    }
+}
+
+@media only screen and (max-width: 641px) {
+    .orLabel {
+        visibility: hidden;
+    }
+}
+.mainContainer {
+    display:flex;
+    flex-direction: row;
+    margin-top: 20px;
+}
+
+.standardContainer{
+    display:flex;
+    flex-direction: row;
+} 
+.customContainer{
+    display:flex;
+    flex-direction: row;
+}
+.dayDropdown {
+    width: 50px;
+    margin-left: 10px;
+}
+.orderDropdown {
+    width: 100px;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+.monthWeekdayDropdown {
+    width: 100px;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+.dayLabel {
+    margin-left: 10px;
+    margin-right: 10px;
+}
+.orLabel {
+    margin-left: 10px;
+    margin-right: 10px;
+    font-size: 18px;
+}
+.onLabel {
+    margin-right: 20px;
+    font-size: 16px;
+    margin-top: 3px;
+}

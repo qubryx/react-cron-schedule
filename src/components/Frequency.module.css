@@ -1,0 +1,33 @@
+@media only screen and (min-width: 641px) {
+    .mainContainer {
+      display:flex;
+      flex-direction: row;
+    }
+}
+
+@media only screen and (max-width: 641px) {
+    .frequencyContainer {
+        margin-top: 20px;
+    }
+    .frequencyInput{
+        margin-left: 6px;
+    }
+}
+
+.repeatLabel {
+    margin-right: 20px;
+}
+.repeatDropdown {
+    width: 80px;
+    margin-right: 40px;
+}
+
+.everyLabel {
+    margin-right: 20px;
+}
+.frequencyInput {
+    width: 50px;
+}
+.selectedRepeatlLabel {
+    margin-left: 10px;
+}

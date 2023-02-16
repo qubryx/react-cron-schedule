@@ -1,0 +1,32 @@
+@media only screen and (min-width: 641px) {
+    .mainContainer {
+        display:flex;
+        flex-direction: row;
+    }
+    .endType {
+        margin-left: 20px;
+    }
+}
+
+@media only screen and (max-width: 641px) {
+    .endContainer {
+        margin-top: 20px;
+    }
+    .endType {
+        margin-left: 24px;
+    }
+}
+
+.mainContainer {
+    margin-top: 20px;
+}
+.startDate {
+    margin-left: 20px;
+    margin-right: 20px;
+}
+.endType {
+    margin-right: 20px;
+}
+.endCount {
+    width: 50px;
+}
