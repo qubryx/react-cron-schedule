@@ -1,16 +1,16 @@
-# React Recurring Job
+# React Cron Schedule 
 A simple and lightweight library for scheduling recurring events in React.
 
 ## Getting Started
 ```shell
-npm install react-recurring-job
+npm install react-cron-schedule
 ```
 
 or 
 
 if you are installing from github package registry
 ```shell
-npm install @qubryx/react-recurring-job
+npm install @qubryx/react-cron-schedule
 ```
 
 If the library is not working as expected (Only for the user installed by github package registry), you may need to add the following line to your `.npmrc` file.
@@ -27,7 +27,7 @@ If the library is not working as expected (Only for the user installed by github
 ## Usage
 
 ```javascript
-import Recurrence from 'react-recurring-job';
+import Recurrence from 'react-cron-schedule';
 
 function App() {
   return (
@@ -70,7 +70,7 @@ value prop can be used to pass default values
 
 
 ```javascript
-import Recurrence from 'react-recurring-job';
+import Recurrence from 'react-cron-schedule';
 
 function App() {
   return (
@@ -125,7 +125,7 @@ export default App;
 
 ```javascript
 
-import Recurrence from 'react-recurring-job';
+import Recurrence from 'react-cron-schedule';
 
 function App() {
   return (
