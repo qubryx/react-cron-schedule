@@ -183,7 +183,7 @@ export default App;
 
 
 ## License
-React Recurring Job is open-sourced software licensed under the MIT license.
+React Recurring Job is open-sourced library licensed under the Apache license.
 
 
 
