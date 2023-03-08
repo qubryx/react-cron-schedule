@@ -60,14 +60,15 @@ value prop can be used to pass default values
 | Names  | Type           | Default | Description | Mandatory |
 | ------ | -------------- |---------|-------------| --------- |
 | startDate| Date/String | new Date()|The starting date of the recurring event| No |
-| endDate| Date/string | null |The ending date of the recurring event | No |
-| repeat| string | 'weekly' |The repeating of the reoccurring event. Possible values: __"weekly"__, __"monthly"__. | No |
-| frequency| number | 1 | The interval between each recurrence. | No |
-| selectedEndType | string | 'noend' | The end type of the recurring event. Possible values: __"noend"__, __"date"__, __"count"__ | No |
-| endCount | number | 10 | The end count of the recurring event | No |
-| cronExpression | string | '' | Cron Expression of the recurring event to set the fied values for editing  | No |
+| endDate| Date/String | null |The ending date of the recurring event | No |
+| repeat| String | 'weekly' |The repeating of the reoccurring event. Possible values: __"weekly"__, __"monthly"__. | No |
+| frequency| Number | 1 | The interval between each recurrence. | No |
+| selectedEndType | String | 'noend' | The end type of the recurring event. Possible values: __"noend"__, __"date"__, __"count"__ | No |
+| endCount | Number | 10 | The end count of the recurring event | No |
+| cronExpression | String | '' | Cron Expression of the recurring event to set the fied values for editing  | No |
+| showOnlyBottomBorder | Boolean | '' | Show only bottom border for all the box components  | false |
 
-
+<br/><br/>
 
 ```javascript
 import Recurrence from 'react-cron-schedule';
@@ -121,7 +122,7 @@ export default App;
 | recurrenceText | styles applied to recurrenct text  |
 | cronExpression | styles applied to cronExpression text  |
 
-
+<br/><br/>
 
 ```javascript
 
