@@ -1,4 +1,4 @@
-import { WEEKDAYS_MAP } from "./weekConstants";
+import {WEEKDAYS_MAP} from './weekConstants';
 
 // min, hour, day, month, week
 export const onWeekDaysCronExp = days => {
@@ -13,6 +13,25 @@ export const onWeekDaysCronExp = days => {
 	return '';
 };
 
+export const onTimeCronExp = (minute, hour, exp) => {
+	let cronExp = ['0', '0', '?', '*', '?'];
+	if (exp && exp !== '') {
+		cronExp = exp.split(' ');
+	}
+	cronExp[0] = `${minute}`;
+	cronExp[1] = `${hour}`;
+	return cronExp.join(' ');
+};
+
+export const onMonthlyCronExp = (month, exp) => {
+	let cronExp = ['0', '0', '?', '*', '?'];
+	if (exp && exp !== '') {
+		cronExp = exp.split(' ');
+	}
+	cronExp[3] = `${Number(month) + 1}`;
+	return cronExp.join(' ');
+};
+
 export const onMonthlyNthDayCronExp = dayDate => {
 	// 0 0 1 * ? - For every 1st Day of the month
 	if (dayDate && dayDate >= 1 && dayDate <= 31) {
@@ -23,8 +42,8 @@ export const onMonthlyNthDayCronExp = dayDate => {
 
 export const onMonthlyLastWeekDayCronExp = dayName => {
 	// 0 0 ? * 5L - For every last Friday of the month
-    const dayData = WEEKDAYS_MAP.find(day => day.name === dayName)
-    const dayNum = dayData?.value;
+	const dayData = WEEKDAYS_MAP.find(day => day.name === dayName);
+	const dayNum = dayData?.value;
 	if (dayNum >= 0 && dayNum <= 6) {
 		return `0 0 ? * ${dayNum}L`;
 	}
@@ -33,8 +52,8 @@ export const onMonthlyLastWeekDayCronExp = dayName => {
 
 export const onMonthlyNthWeekDayCronExp = (order, dayName) => {
 	// 0 0 ? * 3#4 - For every 4th Thursday of the month
-    const dayData = WEEKDAYS_MAP.find(day => day.name === dayName)
-    const dayNum = dayData?.value;
+	const dayData = WEEKDAYS_MAP.find(day => day.name === dayName);
+	const dayNum = dayData?.value;
 	if (order >= 1 && order <= 4 && dayNum >= 0 && dayNum <= 6) {
 		return `0 0 ? * ${dayNum}#${order}`;
 	}
@@ -42,26 +61,19 @@ export const onMonthlyNthWeekDayCronExp = (order, dayName) => {
 };
 
 export const getOrderNum = order => {
-	return order === 'First'
-			? 1
-			: order === 'Second'
-			? 2
-			: order === 'Third'
-			? 3
-			: order === 'Fourth'
-			? 4 : 5;
+	return order === 'First' ? 1 : order === 'Second' ? 2 : order === 'Third' ? 3 : order === 'Fourth' ? 4 : 5;
 };
 
 const getOrderText = order => {
 	return order === 1 || order === '1'
-			? 'First' 
-			: order === 2 || order === '2'
-			? 'Second' 
-			: order === 3 || order === '3'
-			? 'Third'
-			: order === 4 || order === '4'
-			? 'Fourth'
-			: 'Last';
+		? 'First'
+		: order === 2 || order === '2'
+		? 'Second'
+		: order === 3 || order === '3'
+		? 'Third'
+		: order === 4 || order === '4'
+		? 'Fourth'
+		: 'Last';
 };
 
 const getWeekNumber = week => {
@@ -88,17 +100,20 @@ export const getScheduleSettingsFromCronExp = (repeat, cronExp) => {
 	// min, hour, day, month, week
 	if (!cronExp) return {};
 	const cronArr = cronExp.split(' ');
-	if(cronArr.length < 5) return {};
+	if (cronArr.length < 5) return {};
 
 	const schedule = {};
 	// Find rType
 	const weekDays = cronArr[4];
 	const month = cronArr[3];
 	const day = cronArr[2];
+	const hour = cronArr[1];
+	const minute = cronArr[0];
+	schedule.hour = hour;
+	schedule.minute = minute;
 	if (repeat === 'weekly') {
 		// weekday === ? (daily), L and # includes means monthly
-		schedule.selectedWeeks =
-			weekDays === '?' ? [0, 1, 2, 3, 4, 5, 6] : weekDays.split(',').map(i => Number(i));
+		schedule.selectedWeeks = weekDays === '?' ? [0, 1, 2, 3, 4, 5, 6] : weekDays.split(',').map(i => Number(i));
 		if (weekDays === '?') {
 			schedule.selectedWeeks = [0, 1, 2, 3, 4, 5, 6];
 			return schedule;
@@ -115,12 +130,13 @@ export const getScheduleSettingsFromCronExp = (repeat, cronExp) => {
 		schedule.selectedWeeks = weekDaysNumArr;
 		return schedule;
 	}
-	if (month === '*' && repeat === 'monthly') {
+	if (['monthly', 'yearly'].includes(repeat)) {
 		if (weekDays === '?' && !isNaN(day) && !isNaN(parseFloat(day))) {
 			// '0 0 16 * ?'
 			// first day is considered as the standard day 1.
 			schedule.monthOption = 'standard';
 			schedule.selectedMonthDate = Number(day);
+			schedule.month = getMonthNumber(month, repeat);
 			return schedule;
 		}
 		schedule.monthOption = 'custom';
@@ -146,7 +162,17 @@ export const getScheduleSettingsFromCronExp = (repeat, cronExp) => {
 			const weekDayData = WEEKDAYS_MAP.find(item => item.value === Number(weekDays.slice(0, 1)));
 			schedule.selectedMonthDay = weekDayData?.name;
 		}
+		schedule.month = getMonthNumber(month, repeat);
 		return schedule;
 	}
 	return schedule;
+};
+
+const getMonthNumber = (month, rType) => {
+	let monthNumber = new Date().getMonth();
+	// eslint-disable-next-line no-restricted-globals
+	if (month !== '*' && !isNaN(month) && !isNaN(parseFloat(month)) && rType === 'yearly') {
+		monthNumber = Number(month) - 1;
+	}
+	return monthNumber;
 };

@@ -1,7 +1,7 @@
 @media only screen and (min-width: 641px) {
     .mainContainer {
         display:flex;
-        flex-direction: row;
+        flex-direction: column;
     }
     .endType {
         margin-left: 20px;
@@ -9,9 +9,6 @@
 }
 
 @media only screen and (max-width: 641px) {
-    .endContainer {
-        margin-top: 20px;
-    }
     .endType {
         margin-left: 24px;
     }
@@ -20,8 +17,7 @@
 .mainContainer {
     margin-top: 20px;
 }
-.startDate {
-    margin-left: 20px;
+.startLabel{
     margin-right: 20px;
 }
 .endType {
@@ -29,4 +25,20 @@
 }
 .endCount {
     width: 50px;
+}
+.startContainer{
+    display: flex;
+    flex-direction: row;
+}
+.endContainer{
+    display: flex;
+    flex-direction: row;
+    margin-top: 25px;
+}
+.startDate {
+    margin-right: 20px;
+    border: 0px;
+    border-bottom: 1px dotted;
+    padding-bottom: 3px;
+    width: 100px;
 }

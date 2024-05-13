@@ -20,17 +20,16 @@ const Template = (args) => <Recurrence {...args} />;
 const commonArgs = {
     value: {
         frequency: 3,
-        startDate: '2022-02-05',
-        endDate: '2022-07-05',
+        // startDate: '2022-02-05',
+        // endDate: '2022-07-05',
         selectedEndType: 'date',
         endCount: 10,
         cronExpression: '',
     },
     disabled: false,
-    showFrequency: true,
     showCronExpression: false,
     showOnlyBottomBorder: true,
-    onChange: (val) => {}, 
+    onChange: (val) => {console.log("===> onChange: ", val)}, 
     styles: {
         root: { },
         frequencyContainer: {},

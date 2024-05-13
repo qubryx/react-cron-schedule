@@ -1,0 +1,18 @@
+@media only screen and (min-width: 641px) {
+}
+
+@media only screen and (max-width: 641px) {
+}
+
+.mainContainer {
+    margin-top: 25px;
+    margin-bottom: 25px;
+}
+.hourDropdown {
+    margin-left: 20px;
+    margin-right: 10px;
+}
+.minuteDropdown {
+    margin-right: 20px;
+}
+

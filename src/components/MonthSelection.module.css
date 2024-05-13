@@ -13,7 +13,8 @@
 .mainContainer {
     display:flex;
     flex-direction: row;
-    margin-top: 20px;
+    margin-top: 25px;
+    margin-bottom: 30px;
 }
 
 .standardContainer{
@@ -41,10 +42,12 @@
 .dayLabel {
     margin-left: 10px;
     margin-right: 10px;
+    margin-top: 3px;
+    font-size: 14px;
 }
 .orLabel {
     margin-left: 10px;
-    margin-right: 10px;
+    margin-right: 20px;
     font-size: 18px;
 }
 .onLabel {

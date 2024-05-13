@@ -27,12 +27,11 @@ If the library is not working as expected (Only for the user installed by github
 ## Usage
 
 ```javascript
-import Recurrence from 'react-cron-schedule';
+import { Recurrence } from 'react-cron-schedule';
 
 function App() {
   return (
     <Recurrence
-      showFrequency
       onChange={(value) => console.log(value) }
     />
   );
@@ -48,7 +47,6 @@ export default App;
 | ------ | -------------- |---------|-------------| --------- |
 | value| object |  |Fileds in onChange function prop, can use to edit or set default values | No |
 | disabled | boolean | false | Disable all fields | No |
-| showFrequency | boolean | true | Show frequency selection box | No |
 | showCronExpression | boolean | false | Show cron expression of recurring event at the bottom | No |
 | onChange | function |  | Have single object argument, which contains user selected settings  | No |
 | styles | object |  | React style object  | No |
@@ -71,7 +69,7 @@ value prop can be used to pass default values
 <br/><br/>
 
 ```javascript
-import Recurrence from 'react-cron-schedule';
+import { Recurrence } from 'react-cron-schedule';
 
 function App() {
   return (
@@ -126,7 +124,7 @@ export default App;
 
 ```javascript
 
-import Recurrence from 'react-cron-schedule';
+import { Recurrence } from 'react-cron-schedule';
 
 function App() {
   return (
