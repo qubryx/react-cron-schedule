@@ -63,8 +63,11 @@ value prop can be used to pass default values
 | frequency| Number | 1 | The interval between each recurrence. | No |
 | selectedEndType | String | 'noend' | The end type of the recurring event. Possible values: __"noend"__, __"date"__, __"count"__ | No |
 | endCount | Number | 10 | The end count of the recurring event | No |
-| cronExpression | String | '' | Cron Expression of the recurring event to set the fied values for editing  | No |
+| cronExpression | Array of Strings | [] | Cron Expression of the recurring event to set the fied values for editing  | No |
 | showOnlyBottomBorder | Boolean | '' | Show only bottom border for all the box components  | false |
+| repeatFor | Number | '' | The number of occurance after the interval  | false |
+| repeatForType | String | 'days'  | The type of occurance after the interval, possible values: __"days"__, __"workingDays"__, __"weeks"__  | false |
+| isFullWeek | Boolean | '' | To occure an event on the full week  | false |
 
 <br/><br/>
 
