@@ -1,6 +1,6 @@
 {
   "name": "react-cron-schedule",
-  "version": "1.1.4",
+  "version": "2.0.0",
   "description": "A simple react component for creating cron expression",
   "main": "dist/index.js",
   "module": "dist/index.es.js",
@@ -57,6 +57,7 @@
     "react-dom": "^18.2.0"
   },
   "dependencies": {
-    "react-datepicker": "^4.10.0"
+    "react-datepicker": "^4.10.0",
+    "react-select": "^5.8.0"
   }
 }

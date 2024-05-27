@@ -15,23 +15,33 @@ import MonthSelection from './MonthSelection';
 import ReccurringText from './RecurringText';
 import TimeSelection from './TimeSelection';
 import WeekSelection from './WeekSelection';
+import RepeatFor from './RepeatFor';
+import AdditionalOptions from './AdditionalOptions';
+import { END_TYPES, MONTH_DAY_TYPES, MONTH_OPTIONS, ORDERS, REPEAT_OPTIONS } from '../utils/constants';
 
 const initialState = {
 	selectedWeeks: [new Date().getDay()], // [0,1,2,3,4,5,6]
-	monthOption: 'standard', // standard, custom
+	monthOption: MONTH_OPTIONS.STANDARD, // standard, custom
 	selectedMonthDate: new Date().getDate(), // 1,2,3, etc
-	selectedMonthDayOrder: 'First',
-	selectedMonthDay: 'Day', // Monday, etc or Day or Weekday
+	selectedMonthDayOrder: ORDERS.FIRST,
+	selectedMonthDay: MONTH_DAY_TYPES.DAY, // or Day or Weekday etc
 	hour: 0,
 	minute: 0,
-	month: new Date().getMonth(), // for yearly
+	months: [new Date().getMonth()], // for yearly
 	startDate: new Date(),
 	endDate: new Date(),
-	repeat: 'weekly',
+	repeat: REPEAT_OPTIONS.WEEKLY,
 	frequency: 1,
-	selectedEndType: 'noend',
+	repeatFor: undefined, 
+	repeatForType: undefined,
+	isRepeatForDisabled: true,
+	selectedEndType: END_TYPES.NO_END,
 	endCount: 10,
-	cronExpression: ''
+	cronExpression: [],
+	isAdditionalOptionsActive: false,
+	skipFrom: undefined,
+	skipTo: undefined,
+	isFullWeek: false,
 };
 
 function RecurrenceComponent(props) {
@@ -43,44 +53,65 @@ function RecurrenceComponent(props) {
 		if (value) {
 			data = {...data, ...value};
 		}
-		if (value?.cronExpression && value?.cronExpression !== '') {
-			const schedule = getScheduleSettingsFromCronExp(value?.repeat, value?.cronExpression);
+		if (value?.cronExpression?.length > 0) {
+			const schedule = getScheduleSettingsFromCronExp(value?.repeat, value?.cronExpression, value?.isFullWeek);
 			if (schedule) {
-				data = {...data, ...schedule};
+				data = {
+					...data,
+					...schedule,
+					isRepeatForDisabled: !value?.repeatFor || value?.repeatFor <= 1,
+					isAdditionalOptionsActive: (value?.skipFrom && value.skipTo)
+				};
 			}
 		}
 		setState(data);
 	}, [props?.key]);
 
 	useEffect(() => {
-		let cronExp = '';
-		if (state?.repeat === 'weekly') {
-			cronExp = onWeekDaysCronExp(state.selectedWeeks);
-		} else if (state?.repeat === 'monthly' || state?.repeat === 'yearly') {
-			if (state.monthOption === 'custom') {
+		let cronExp = [];
+		if (state?.repeat === REPEAT_OPTIONS.WEEKLY) {
+			cronExp = [onWeekDaysCronExp(state.selectedWeeks)];
+		} else if (state?.repeat === REPEAT_OPTIONS.MONTHLY || state?.repeat === REPEAT_OPTIONS.YEARLY) {
+			if (state.monthOption === MONTH_OPTIONS.CUSTOM) {
 				const orderNum = getOrderNum(state.selectedMonthDayOrder);
-				if (state.selectedMonthDay === 'Day') {
-					if (state.selectedMonthDayOrder === 'Last') {
-						cronExp = `0 0 L * ?`;
+				if (state.selectedMonthDay === MONTH_DAY_TYPES.DAY) {
+					if (state.selectedMonthDayOrder === ORDERS.LAST) {
+						cronExp = [`0 0 L * ?`];
 					} else {
-						cronExp = onMonthlyNthDayCronExp(orderNum);
+						cronExp = [onMonthlyNthDayCronExp(orderNum)];
 					}
-				} else if (state.selectedMonthDay === 'Weekday') {
-					if (state.selectedMonthDayOrder === 'First') {
-						cronExp = `0 0 1W * ?`;
-					} else if (state.selectedMonthDayOrder === 'Last') {
-						cronExp = `0 0 LW * ?`;
+				} else if (state.selectedMonthDay === MONTH_DAY_TYPES.WEEKDAY) {
+					if (state.selectedMonthDayOrder === ORDERS.FIRST) {
+						cronExp = [`0 0 1W * ?`];
+					} else if (state.selectedMonthDayOrder === ORDERS.LAST) {
+						cronExp = [`0 0 LW * ?`];
 					}
-				} else if (state.selectedMonthDayOrder === 'Last') {
-					cronExp = onMonthlyLastWeekDayCronExp(state.selectedMonthDay);
-				} else {
-					cronExp = onMonthlyNthWeekDayCronExp(orderNum, state.selectedMonthDay);
+				} else if (state.selectedMonthDay === MONTH_DAY_TYPES.FULL_WEEK){
+					if (state.selectedMonthDayOrder === ORDERS.LAST) {
+						cronExp = [`0 0 ? * 6L`];
+					} else {
+						cronExp = [`0 0 ? * 0#${orderNum}`];
+					} 
+				} else if (state.selectedMonthDay === MONTH_DAY_TYPES.FULL_WORKING_WEEK){
+					if (state.selectedMonthDayOrder === ORDERS.LAST) {
+						cronExp = [`0 0 ? * 5L`];
+					} else {
+						cronExp = [`0 0 ? * 1#${orderNum}`];
+					} 
+				} else if (state.selectedMonthDay === MONTH_DAY_TYPES.SELECT_DAYS_MANUALLY){
+					cronExp = state.selectedWeeks.map(weekDay => {
+						if (state.selectedMonthDayOrder === ORDERS.LAST) {
+							return `0 0 ? * ${weekDay}L`;
+						} else {
+							return `0 0 ? * ${weekDay}#${orderNum}`;
+						}
+					})
 				}
 			} else {
-				cronExp = onMonthlyNthDayCronExp(state.selectedMonthDate);
+				cronExp = [onMonthlyNthDayCronExp(state.selectedMonthDate)];
 			}
-			if (state?.repeat === 'yearly') {
-				cronExp = onMonthlyCronExp(state.month, cronExp);
+			if (state?.repeat === REPEAT_OPTIONS.YEARLY) {
+				cronExp = onMonthlyCronExp(state.months, cronExp);
 			}
 		}
 		cronExp = onTimeCronExp(state.minute, state.hour, cronExp);
@@ -95,7 +126,7 @@ function RecurrenceComponent(props) {
 		state.selectedMonthDay,
 		state.hour,
 		state.minute,
-		state.month
+		state.months,
 	]);
 
 	const setStateData = data => {
@@ -120,13 +151,39 @@ function RecurrenceComponent(props) {
 	return (
 		<div style={props?.styles?.root}>
 			<Frequency {...props} setValue={setValue} state={state} setState={setStateData} />
-			{state?.repeat === 'weekly' ? (
-				<WeekSelection {...props} setValue={setValue} state={state} setState={setStateData} />
-			) : state?.repeat === 'monthly' || state?.repeat === 'yearly' ? (
+			{state?.repeat === REPEAT_OPTIONS.WEEKLY ? (
+				<WeekSelection
+					{...props}
+					setValue={setValue}
+					state={state}
+					setState={setStateData}
+				/>
+			) : state?.repeat === REPEAT_OPTIONS.MONTHLY || state?.repeat === REPEAT_OPTIONS.YEARLY ? (
+				<>
 				<MonthSelection {...props} setValue={setValue} state={state} setState={setStateData} />
+				{ state.selectedMonthDay === MONTH_DAY_TYPES.SELECT_DAYS_MANUALLY && state.monthOption === MONTH_OPTIONS.CUSTOM && 
+					<WeekSelection
+						{...props}
+						setValue={setValue}
+						state={state}
+						setState={setStateData}
+					/>
+				}
+				{!(state.selectedMonthDayOrder === ORDERS.LAST && state.monthOption === MONTH_OPTIONS.CUSTOM) &&
+				<RepeatFor {...props} setValue={setValue} state={state} setState={setStateData}/>
+}
+				</>
 			) : null}
 			<DateSelection {...props} setValue={setValue} state={state} setState={setStateData} />
 			<TimeSelection {...props} setValue={setValue} state={state} setState={setStateData} />
+			{(
+				(state?.repeat === REPEAT_OPTIONS.MONTHLY || state?.repeat === REPEAT_OPTIONS.YEARLY) &&
+				(state?.monthOption === MONTH_OPTIONS.STANDARD 
+					|| (state?.monthOption === MONTH_OPTIONS.CUSTOM && state?.selectedMonthDayOrder !== ORDERS.LAST && [MONTH_DAY_TYPES.DAY, MONTH_DAY_TYPES.WEEKDAY].includes(state?.selectedMonthDay))
+				)
+			) &&
+				<AdditionalOptions {...props} setValue={setValue} state={state} setState={setStateData}/>
+			}
 			<ReccurringText {...props} setValue={setValue} state={state} setState={setStateData} />
 			{props.showCronExpression && <div style={{marginTop: 20}}>{state?.cronExpression}</div>}
 		</div>

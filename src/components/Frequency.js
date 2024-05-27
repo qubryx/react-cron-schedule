@@ -1,16 +1,40 @@
-import React from 'react';
-import css from './Frequency.module.css';
-import {MONTHS} from '../utils/weekConstants';
+import React, { useEffect, useState } from 'react';
+import Select from 'react-select';
 
-const repeatOptions = ['weekly', 'monthly', 'yearly'];
-const MonthValues = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
+import css from './Frequency.module.css';
+import {MONTHS, REPEAT_OPTIONS} from '../utils/constants';
+
+const repeatOptions = [REPEAT_OPTIONS.WEEKLY, REPEAT_OPTIONS.MONTHLY, REPEAT_OPTIONS.YEARLY];
 
 function Frequency(props) {
-	const {disabled = false, styles = {}, value = {}, setValue, state = {}, setState} = props;
-	const {month, repeat, frequency} = state;
+	const {disabled = false, styles = {}, setValue, state = {}, setState} = props;
+	const {months, repeat, frequency} = state;
+  const [monthOptions, setMonthOptions] = useState([])
+  const [selectedMonths, setSelectedMonths] = useState([])
+
+  useEffect(()=>{
+    const selMonths = months.map(m => {
+      return {value: m, label: MONTHS[m]}
+    })
+    setSelectedMonths(selMonths);
+    const options = MONTHS.map((m, index) => {
+      return {value: index, label: m}
+    })
+    setMonthOptions(options)
+  },[])
 
 	const handleRepeatClick = event => {
-		setValue({repeat: event?.target?.value, frequency: event.target.value === 'yearly' ? 1 : Number(frequency)});
+    const val = event?.target?.value
+		setValue({
+      repeat: val,
+      frequency: val === REPEAT_OPTIONS.YEARLY ? 1 : Number(frequency),
+      repeatFor: undefined, 
+      repeatForType: undefined,
+      isRepeatForDisabled: true, 
+      skipFrom: undefined,
+      skipTo: undefined,
+      isAdditionalOptionsActive: false
+    });
 	};
 
 	const handleFrequencyChange = event => {
@@ -18,7 +42,9 @@ function Frequency(props) {
 	};
 
 	const handleMonthChange = event => {
-		setState({month: Number(event?.target?.value)});
+    if(event?.length === 0) return
+		setState({months: event?.map(m => Number(m?.value))});
+    setSelectedMonths(event)
 	};
 
 	return (
@@ -44,27 +70,31 @@ function Frequency(props) {
 					))}
 				</select>
 			</div>
-			<div className={css.frequencyContainer}>
+			<div className={css.frequencyContainer} style={styles.frequencyContainer}>
 				<label className={css.everyLabel} style={styles.everyLabel}>
 					Every
 				</label>
-				{repeat === 'yearly' ? (
-					<select
-						key="months"
-						style={styles.monthDropdown}
-						disabled={disabled}
-						value={month}
-						className={css.monthDropdown}
-						name="months"
-						id="months"
-						onChange={handleMonthChange}
-					>
-						{MonthValues.map(item => (
-							<option key={item} value={item}>
-								{MONTHS[item]}
-							</option>
-						))}
-					</select>
+				{repeat === REPEAT_OPTIONS.YEARLY ? (
+          <Select
+            value={selectedMonths}
+            onChange={handleMonthChange}
+            isMulti
+            name="months"
+            options={monthOptions}
+            required
+            closeMenuOnSelect={false}
+            isClearable={false}
+            styles={{
+              control: (baseStyles, state) => ({
+                ...baseStyles,
+                maxWidth: 300,
+                border: 'none',
+                borderBottom: '1px dotted',
+                borderRadius: 0,
+                marginTop: -10
+              }),
+            }}
+          />
 				) : (
 					<>
 						<input

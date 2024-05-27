@@ -1,8 +1,9 @@
 import React from 'react';
 import DatePicker from 'react-datepicker';
-import css from './DateSelection.module.css';
-
 import 'react-datepicker/dist/react-datepicker.css';
+
+import css from './DateSelection.module.css';
+import { END_TYPES } from '../utils/constants';
 
 function DateSelection(props) {
 	const {disabled = false, styles = {}, value = {}, setValue, state = {}, setState} = props;
@@ -44,24 +45,24 @@ function DateSelection(props) {
 					style={styles.endType}
 					onChange={handleEndTypeChange}
 				>
-					<option key="NoEnd" value="NoEnd">
+					<option key="NoEnd" value={END_TYPES.NO_END}>
 						no end date
 					</option>
-					<option key="Date" value="Date">
+					<option key="Date" value={END_TYPES.DATE}>
 						on this day
 					</option>
-					<option key="Count" value="Count">
+					<option key="Count" value={END_TYPES.COUNT}>
 						after
 					</option>
 				</select>
-				{selectedEndType === 'Date' ? (
+				{selectedEndType === END_TYPES.DATE ? (
 					<DatePicker
 						disabled={disabled}
 						className={css.startDate}
 						selected={endDate}
 						onChange={handleEndDateChange}
 					/>
-				) : selectedEndType === 'Count' ? (
+				) : selectedEndType === END_TYPES.COUNT ? (
 					<>
 						<input
 							disabled={disabled}

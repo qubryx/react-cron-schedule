@@ -1,72 +1,31 @@
 import React from 'react';
-import css from './WeekSelection.module.css';
-import {WEEKDAYS_MAP} from '../utils/weekConstants';
+import WeekSelectionComponent from './WeekSelectionComponent';
+import { ORDERS, REPEAT_OPTIONS, REPEAT_TYPES } from '../utils/constants';
 
 function WeekSelection(props) {
-	const {disabled = false, styles = {}, value = {}, setValue, state = {}, setState} = props;
-	const {selectedWeeks} = state;
+	const {disabled = false, styles = {}, state = {}, setState, setValue} = props;
+	const {selectedWeeks, repeat, isRepeatForDisabled, selectedMonthDayOrder} = state;
 
 	const handleWeekDaysChange = checkedDay => {
 		const newSelectedDays = selectedWeeks.includes(checkedDay)
 			? selectedWeeks.filter(i => i !== checkedDay).sort()
 			: selectedWeeks.concat([checkedDay]).sort();
-		setState({selectedWeeks: newSelectedDays});
-	};
-
-	const handleWeekDaySelectChange = e => {
-		let val = e?.target?.value;
-		if (val) {
-			val = Number(value);
-			handleWeekDaysChange(val);
+		setState({selectedWeeks: newSelectedDays });
+		if(repeat !== REPEAT_OPTIONS.WEEKLY && !isRepeatForDisabled && newSelectedDays?.length>1){
+			setValue({
+				repeatFor: selectedMonthDayOrder === ORDERS.LAST ? 1 : 2,
+				repeatForType: REPEAT_TYPES.WEEKS
+			})
 		}
 	};
 
 	return (
-		<div style={styles.weekContainer}>
-			<div className={css.container}>
-				{WEEKDAYS_MAP.map((res, key) => {
-					return (
-						<div key={key} className={css.weekdayBtnContainer} style={styles.weekdayBtnContainer}>
-							<button
-								type="button"
-								disabled={disabled}
-								value={res.value}
-								className={selectedWeeks.includes(res.value) ? css.selectedWeekdayBtn : css.weekdayBtn}
-								style={
-									selectedWeeks.includes(res.value) ? styles.selectedWeekdayBtn : styles.weekdayBtn
-								}
-								onClick={event => handleWeekDaysChange(res.value)}
-							>
-								{res.name.slice(0, 3)}
-							</button>
-						</div>
-					);
-				})}
-			</div>
-			<div className={css.weekCheckBoxContainer}>
-				{WEEKDAYS_MAP.map(item => (
-					<label key={item.name}>
-						<input
-							disabled={disabled}
-							checked={selectedWeeks.includes(item.value)}
-							type="checkbox"
-							onChange={handleWeekDaySelectChange}
-							value={item.value}
-						/>
-						<span
-							className={css.weekdayFullTextLabel}
-							style={
-								selectedWeeks.includes(item.value)
-									? styles.selectedWeekdayFullTextLabel
-									: styles.weekdayFullTextLabel
-							}
-						>
-							{item.name}
-						</span>
-					</label>
-				))}
-			</div>
-		</div>
+		<WeekSelectionComponent 
+			disabled={disabled}
+			styles={styles}
+			selectedWeeks={selectedWeeks}
+			onClick={handleWeekDaysChange}
+		/>
 	);
 }
 

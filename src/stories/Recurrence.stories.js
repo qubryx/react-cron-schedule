@@ -15,6 +15,87 @@ export default {
     }
 };
 
+/*
+    CASE1:
+        // Standard
+        value {
+            cronExpression: ['0 0 20 * ?'],
+            repeatFor: 4,
+            repeatForType: 'workingDays'
+        }
+    CASE2:
+        // Custom => Day
+        value {
+            cronExpression: ['0 0 1 * ?'],
+            repeatFor: 4,
+            repeatForType: 'days'
+        }
+        value {
+            cronExpression: ['0 0 L * ?'],
+            repeatFor: 1,
+            repeatForType: 'days'
+        }
+    CASE3:
+        // Custom => Weekday
+        value {
+            cronExpression: ['0 0 1W * ?'],
+            repeatFor: 4,
+            repeatForType: 'days' 
+        }
+        value {
+            cronExpression: ['0 0 1W * ?'],
+            repeatFor: 4,
+            repeatForType: 'workingDays' 
+        }
+        value {
+            cronExpression: ['0 0 LW * ?'],
+            repeatFor: 4,
+            repeatForType: 'workingDays' 
+        }
+    CASE4
+        // Custom => Full week
+        value {
+            cronExpression: ['0 0 ? * 0#2'],
+            repeatFor: 3,
+            repeatForType: 'weeks',
+            isFullWeek: true
+        }
+        // Custom => Last full week
+        value {
+            cronExpression: ['0 0 ? * 6L'],
+            repeatFor: 3,
+            repeatForType: 'weeks',
+            isFullWeek: true
+        }
+        // Custom => Last full working week
+        value {
+            cronExpression: ['0 0 ? * 5L'],
+            repeatFor: 3,
+            repeatForType: 'weeks',
+            isFullWeek: true
+        }
+        // Custom => Full working week
+        value {
+            cronExpression: ['0 0 ? * 1#2'],
+            repeatFor: 3,
+            repeatForType: 'weeks',
+            isFullWeek: true
+        }
+    CASE 5
+        // Custom => Manual day selection
+        value {
+            cronExpression: ["5 10 ? * 1#2", "5 10 ? * 3#2", "5 10 ? * 5#2"],
+            repeatFor: 3,
+            repeatForType: 'weeks',
+        }
+        // Custom => Last manual day selection
+        value {
+            cronExpression: ["5 10 ? * 1L", "5 10 ? * 3L", "5 10 ? * 5L"],
+            repeatFor: 1,
+            repeatForType: 'weeks',
+        }
+*/
+
 const Template = (args) => <Recurrence {...args} />;
 
 const commonArgs = {
@@ -22,9 +103,16 @@ const commonArgs = {
         frequency: 3,
         // startDate: '2022-02-05',
         // endDate: '2022-07-05',
-        selectedEndType: 'date',
+        selectedEndType: 'noend',
         endCount: 10,
-        cronExpression: '',
+        cronExpression: '0 0 25 * ?',
+        repeat: 'yearly',
+
+        cronExpression: ["5 10 10 5 ?"],
+        repeatFor: 3,
+        repeatForType: 'days',
+        skipFrom: 3,
+        skipTo: 2
     },
     disabled: false,
     showCronExpression: false,

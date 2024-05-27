@@ -14,6 +14,11 @@
     }
 }
 
+.frequencyContainer {
+    display:flex;
+    flex-direction: row;
+  }
+
 .repeatLabel {
     margin-right: 20px;
 }
@@ -31,3 +36,41 @@
 .selectedRepeatlLabel {
     margin-left: 10px;
 }
+
+.dropdown {
+    width: 200px;
+    font-family: 'Roboto', 'Helvetica', 'Arial', sans-serif;
+  }
+  
+  .dropdownHeader {
+    padding: 10px;
+    border: 1px solid #ccc;
+    cursor: pointer;
+    user-select: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #fff;
+  }
+  
+  .dropdownIcon {
+    margin-left: 10px;
+  }
+  
+  .dropdownBody {
+    position: absolute;
+    border: 1px solid #ccc;
+    width: 200px;
+    background-color: #fff;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    z-index: 1000;
+  }
+  
+  .dropdownItem {
+    padding: 10px;
+    cursor: pointer;
+  }
+  
+  .dropdownItem:hover, .dropdownItem.selected {
+    background-color: #eee;
+  }

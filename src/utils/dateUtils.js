@@ -1,4 +1,4 @@
-import { MONTHS, WEEKDAYS_MAP } from "./weekConstants";
+import { MONTHS, WEEKDAYS_MAP } from "./constants";
 
 // date str format: YYYY-MM-DD
 export const getWeekday = (date) => {

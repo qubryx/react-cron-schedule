@@ -12,7 +12,22 @@ export const Recurrence = (props) => {
       data.styles = {}
     }
     if(props?.showOnlyBottomBorder){
-      const boxFields = ['repeatDropdown', 'frequencyInput', 'endType', 'endCount', 'dayDropdown', 'orderDropdown', 'monthWeekdayDropdown', 'hourDropdown', 'minuteDropdown', 'monthDropdown']
+      const boxFields = [
+        'repeatDropdown',
+        'frequencyInput',
+        'endType',
+        'endCount',
+        'dayDropdown',
+        'orderDropdown',
+        'monthWeekdayDropdown',
+        'hourDropdown',
+        'minuteDropdown',
+        'monthDropdown',
+        'lastCount',
+        'repeatForCount',
+        'repeatForType', 
+        'additionalOptionWeekDropdown'
+      ]
       boxFields.forEach(field => {
         data.styles[field] = {
           ...data.styles[field],
