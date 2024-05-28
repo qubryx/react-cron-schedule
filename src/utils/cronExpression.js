@@ -117,6 +117,7 @@ export const getScheduleSettingsFromCronExp = (repeat, cronExps, isFullWeek) => 
 			const firstExpArr = cronExps[0]?.split(' ')
 			schedule.minute = firstExpArr[0];
 			schedule.hour = firstExpArr[1];
+			schedule.months = getMonthNumber(firstExpArr[3], repeat);
 			const firstExpWeekDays = firstExpArr[4]
 			schedule.selectedMonthDayOrder = firstExpWeekDays.includes('L') ? ORDERS.LAST : getOrderText(firstExpWeekDays.charAt(firstExpWeekDays.length - 1))
 			schedule.selectedWeeks = cronExps.map(expression => {
