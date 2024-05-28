@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react'
 import css from './RepeatFor.module.css';
 import RepeatForDropdown from './RepeatForDropdown';
-import { MONTH_DAY_TYPES, MONTH_OPTIONS, ORDERS, REPEAT_OPTIONS, REPEAT_TYPES } from '../utils/constants';
+import { MONTH_DAY_TYPES, MONTH_OPTIONS, ORDERS, REPEAT_TYPES } from '../utils/constants';
 
 function RepeatFor(props) {
     const {disabled = false, styles = {}, state = {}, setState, setValue} = props;
@@ -28,7 +28,8 @@ function RepeatFor(props) {
     const handleRepeatForCheckbox = event => {
         let isDisabled = !isRepeatForDisabled 
 		const rType = ( monthOption === MONTH_OPTIONS.STANDARD ||
-            [MONTH_DAY_TYPES.DAY, MONTH_DAY_TYPES.WEEKDAY].includes(selectedMonthDay)
+            [MONTH_DAY_TYPES.DAY, MONTH_DAY_TYPES.WEEKDAY].includes(selectedMonthDay) ||
+            (selectedMonthDay === MONTH_DAY_TYPES.SELECT_DAYS_MANUALLY && selectedWeeks?.length === 1 && selectedMonthDayOrder === ORDERS.FOURTH)
         ) ? REPEAT_TYPES.DAYS : REPEAT_TYPES.WEEKS
 
         setState({ isRepeatForDisabled: isDisabled })
@@ -51,13 +52,17 @@ function RepeatFor(props) {
                 arr = [
                     {value: REPEAT_TYPES.DAYS, label: 'days'},
                     {value: REPEAT_TYPES.WORKING_DAYS, label: 'working days'},
-                    {value: REPEAT_TYPES.WEEKS, label: 'weeks'},
                 ]
+                if([ORDERS.FIRST, ORDERS.SECOND, ORDERS.THIRD].includes(selectedMonthDayOrder)){
+                    arr.push(
+                        {value: REPEAT_TYPES.WEEKS, label: 'weeks'}
+                    )
+                }
 
             }
         }
         return arr
-    },[monthOption, selectedMonthDay, selectedWeeks])
+    },[monthOption, selectedMonthDay, selectedWeeks, selectedMonthDayOrder])
 
   return (
     <div>
@@ -65,7 +70,7 @@ function RepeatFor(props) {
             disabled={
                 disabled ||
                 (monthOption === MONTH_OPTIONS.STANDARD && Number(selectedMonthDate) > 27) ||
-                (monthOption === MONTH_OPTIONS.CUSTOM && selectedMonthDayOrder === ORDERS.FOURTH && [MONTH_DAY_TYPES.FULL_WEEK, MONTH_DAY_TYPES.FULL_WORKING_WEEK, MONTH_DAY_TYPES.SELECT_DAYS_MANUALLY].includes(selectedMonthDay))
+                (monthOption === MONTH_OPTIONS.CUSTOM && selectedMonthDayOrder === ORDERS.FOURTH && [MONTH_DAY_TYPES.FULL_WEEK, MONTH_DAY_TYPES.FULL_WORKING_WEEK].includes(selectedMonthDay))
             }
             value="isRepeatForDisabled"
             name="isRepeatForDisabled"

@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react'
 import css from './RepeatForDropdown.module.css';
 import { getOrderNum } from '../utils/cronExpression';
-import { MONTH_DAY_TYPES, MONTH_OPTIONS, ORDERS, REPEAT_OPTIONS, REPEAT_TYPES } from '../utils/constants';
+import { MONTH_DAY_TYPES, MONTH_OPTIONS, ORDERS, REPEAT_TYPES } from '../utils/constants';
 
 function RepeatForDropdown(props) {
     const {disabled = false, styles = {}, state = {}, setValue} = props;
@@ -25,9 +25,10 @@ function RepeatForDropdown(props) {
                 if (selectedMonthDayOrder === ORDERS.LAST) {
                     arr = selectedWeeks?.length > 1 ? [1] : [1,2,3,4]
                 } else {
-                    const totalDaysNum = repeatForType === REPEAT_TYPES.WORKING_DAYS ? 20 : totalDays
+                    const totalDaysNum = repeatForType === REPEAT_TYPES.WORKING_DAYS ? 22 : totalDays
+                    const sub = repeatForType === REPEAT_TYPES.WORKING_DAYS ? (5*(orderNum-1)) : (7*(orderNum-1))
                     arr = repeatForType === REPEAT_TYPES.WEEKS ? [...Array(6 - orderNum).keys()] 
-                        : [...Array(totalDaysNum-orderNum).keys()]
+                        : [...Array(totalDaysNum-sub).keys()]
                 }
             } else if([MONTH_DAY_TYPES.FULL_WEEK, MONTH_DAY_TYPES.FULL_WORKING_WEEK].includes(selectedMonthDay)){
                 daysNum =  selectedMonthDayOrder === ORDERS.LAST ? 4 : 5 - orderNum
