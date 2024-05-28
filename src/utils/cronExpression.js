@@ -204,9 +204,9 @@ export const getScheduleSettingsFromCronExp = (repeat, cronExps, isFullWeek) => 
 			schedule.selectedMonthDayOrder = ORDERS.LAST;
 		} else if (weekDays.includes('#')) {
 			// '0 0 ? * 3#4' - weeekday First/Second/etc of the month
+			schedule.selectedWeeks = [ Number(weekDays.slice(0,1)) ]
 			schedule.selectedMonthDayOrder = getOrderText(weekDays.charAt(weekDays.length - 1));
-			const weekDayData = WEEKDAYS_MAP.find(item => item.value === Number(weekDays.slice(0, 1)));
-			schedule.selectedMonthDay = weekDayData?.name;
+			schedule.selectedMonthDay = MONTH_DAY_TYPES.SELECT_DAYS_MANUALLY;
 		}
 		schedule.months = getMonthNumber(month, repeat);
 		return schedule;
