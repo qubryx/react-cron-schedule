@@ -21,7 +21,7 @@ function Frequency(props) {
       return {value: index, label: m}
     })
     setMonthOptions(options)
-  },[])
+  },[months])
 
 	const handleRepeatClick = event => {
     const val = event?.target?.value
@@ -43,8 +43,7 @@ function Frequency(props) {
 
 	const handleMonthChange = event => {
     if(event?.length === 0) return
-		setState({months: event?.map(m => Number(m?.value))});
-    setSelectedMonths(event)
+		setValue({months: event?.map(m => Number(m?.value))});
 	};
 
 	return (

@@ -108,7 +108,7 @@ const commonArgs = {
         cronExpression: '0 0 25 * ?',
         repeat: 'yearly',
 
-        cronExpression: ["5 10 10 5 ?"],
+        cronExpression: ["5 10 10 6,7 ?"],
         repeatFor: 3,
         repeatForType: 'days',
         skipFrom: 3,

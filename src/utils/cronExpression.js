@@ -163,7 +163,7 @@ export const getScheduleSettingsFromCronExp = (repeat, cronExps, isFullWeek) => 
 		if(isFullWeek){
 			// '0 0 ? * 6L' or '0 0 ? * 0#2'
 			schedule.monthOption = MONTH_OPTIONS.CUSTOM
-			schedule.month = getMonthNumber(month, repeat);
+			schedule.months = getMonthNumber(month, repeat);
 			const weekdayNum = Number(weekDays.slice(0,1));
 			if(weekDays.includes("L")){
 				schedule.selectedMonthDayOrder = ORDERS.LAST;
@@ -179,7 +179,7 @@ export const getScheduleSettingsFromCronExp = (repeat, cronExps, isFullWeek) => 
 			// first day is considered as the standard day 1.
 			schedule.monthOption = MONTH_OPTIONS.STANDARD;
 			schedule.selectedMonthDate = Number(day);
-			schedule.month = getMonthNumber(month, repeat);
+			schedule.months = getMonthNumber(month, repeat);
 			return schedule;
 		}
 
@@ -207,7 +207,7 @@ export const getScheduleSettingsFromCronExp = (repeat, cronExps, isFullWeek) => 
 			const weekDayData = WEEKDAYS_MAP.find(item => item.value === Number(weekDays.slice(0, 1)));
 			schedule.selectedMonthDay = weekDayData?.name;
 		}
-		schedule.month = getMonthNumber(month, repeat);
+		schedule.months = getMonthNumber(month, repeat);
 		return schedule;
 	}
 	return schedule;
