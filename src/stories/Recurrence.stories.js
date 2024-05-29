@@ -108,9 +108,9 @@ const commonArgs = {
         cronExpression: '0 0 25 * ?',
         repeat: 'monthly',
 
-        cronExpression: ["0 0 ? * 1#1"],
-            repeatFor: 10,
-            repeatForType: 'workingDays',
+        cronExpression: ['0 0 20 * ?'],
+            repeatFor: 4,
+            repeatForType: 'workingDays'
     },
     disabled: false,
     showCronExpression: false,

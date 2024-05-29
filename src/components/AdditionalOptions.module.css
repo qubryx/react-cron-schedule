@@ -5,3 +5,12 @@
     margin-left: 10px;
     margin-right: 10px;
 }
+.noteComponent {
+    margin-top: 12px;
+    color: gray;
+    margin-left: 30px;
+}
+
+.noteText {
+    font-size: 15px;
+}

@@ -120,7 +120,9 @@ function MonthSelection(props) {
 						onChange={handleMonthDayOrderChange}
 					>
 						{OrderOptions.map(item => {
-							const optionDisable = ![ORDERS.FIRST, ORDERS.LAST].includes(item) && selectedMonthDay === MONTH_DAY_TYPES.WEEKDAY;
+							const optionDisable =
+								(![ORDERS.FIRST, ORDERS.LAST].includes(item) && selectedMonthDay === MONTH_DAY_TYPES.WEEKDAY) ||
+								(item === ORDERS.FOURTH && [MONTH_DAY_TYPES.FULL_WEEK, MONTH_DAY_TYPES.FULL_WORKING_WEEK].includes(selectedMonthDay))
 							return (
 								<option key={item} disabled={optionDisable} value={item}>
 									{item}
@@ -142,7 +144,8 @@ function MonthSelection(props) {
 					>
 						{monthDayTypeOptions().map(item => {
 							const optionDisable =
-								(item.value === MONTH_DAY_TYPES.WEEKDAY && ![ORDERS.FIRST, ORDERS.LAST].includes(selectedMonthDayOrder))
+								(item.value === MONTH_DAY_TYPES.WEEKDAY && ![ORDERS.FIRST, ORDERS.LAST].includes(selectedMonthDayOrder)) || 
+								([MONTH_DAY_TYPES.FULL_WEEK, MONTH_DAY_TYPES.FULL_WORKING_WEEK].includes(item.value) && selectedMonthDayOrder === ORDERS.FOURTH)
 							return (
 								<option key={item.value} disabled={optionDisable} value={item.value}>
 									{item.name}

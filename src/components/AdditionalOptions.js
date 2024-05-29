@@ -1,11 +1,11 @@
 import React from 'react'
 
 import css from './AdditionalOptions.module.css';
-import { WEEKDAYS_MAP } from '../utils/constants'
+import { MONTH_OPTIONS, WEEKDAYS_MAP } from '../utils/constants'
 
 function AdditionalOptions(props) {
 	const {disabled = false, styles = {}, state = {}, setState, setValue} = props;
-    const {isAdditionalOptionsActive, skipFrom, skipTo} = state
+    const {isAdditionalOptionsActive, skipFrom, skipTo, selectedMonthDate, monthOption} = state
 
     const handleAdditionalOptionCheckbox = event => {
         setState({isAdditionalOptionsActive: !isAdditionalOptionsActive})
@@ -16,11 +16,11 @@ function AdditionalOptions(props) {
     }
 
     const handleSkipFromChange = event => {
-        setState({skipFrom: event?.target?.value})
+        setState({skipFrom: Number(event?.target?.value)})
     }
 
     const handleSkipToChange = event => {
-        setState({skipTo: event?.target?.value})
+        setState({skipTo: Number(event?.target?.value)})
     }
 
     return (
@@ -78,6 +78,15 @@ function AdditionalOptions(props) {
                     ))}
                 </select>
             </div>
+            { isAdditionalOptionsActive && skipFrom !== undefined && skipTo !== undefined &&
+                monthOption === MONTH_OPTIONS.STANDARD && selectedMonthDate > 22 &&
+                <div className={css.noteComponent}>
+                    <span>NOTE: </span>
+                    <span className={css.noteText}> 
+                       {`If the next ${WEEKDAYS_MAP.find(x => x.value === skipTo)?.name} falls in the following month, the task will be created on ${WEEKDAYS_MAP.find(x => x.value === skipFrom)?.name} instead.`}
+                    </span>
+                </div>
+            }
         </div>
   )
 }
