@@ -65,7 +65,7 @@ function RepeatFor(props) {
     },[monthOption, selectedMonthDay, selectedWeeks, selectedMonthDayOrder])
 
   return (
-    <div>
+    <div className={css.repeatForContainer}>
         <input
             disabled={
                 disabled ||
