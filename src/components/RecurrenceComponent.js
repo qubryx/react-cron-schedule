@@ -3,9 +3,7 @@ import {
 	getOrderNum,
 	getScheduleSettingsFromCronExp,
 	onMonthlyCronExp,
-	onMonthlyLastWeekDayCronExp,
 	onMonthlyNthDayCronExp,
-	onMonthlyNthWeekDayCronExp,
 	onTimeCronExp,
 	onWeekDaysCronExp
 } from '../utils/cronExpression';
@@ -18,6 +16,7 @@ import WeekSelection from './WeekSelection';
 import RepeatFor from './RepeatFor';
 import AdditionalOptions from './AdditionalOptions';
 import { END_TYPES, MONTH_DAY_TYPES, MONTH_OPTIONS, ORDERS, REPEAT_OPTIONS } from '../utils/constants';
+import { getEndDateFromCount } from '../utils/parseCronExpression';
 
 const initialState = {
 	selectedWeeks: [new Date().getDay()], // [0,1,2,3,4,5,6]
@@ -37,6 +36,7 @@ const initialState = {
 	isRepeatForDisabled: true,
 	selectedEndType: END_TYPES.NO_END,
 	endCount: 10,
+	countEndDate: undefined,
 	cronExpression: [],
 	isAdditionalOptionsActive: false,
 	skipFrom: undefined,
@@ -55,12 +55,28 @@ function RecurrenceComponent(props) {
 		}
 		if (value?.cronExpression?.length > 0) {
 			const schedule = getScheduleSettingsFromCronExp(value?.repeat, value?.cronExpression, value?.isFullWeek);
+			let countEndDate = undefined
+			if(value?.selectedEndType === END_TYPES.COUNT && value?.endCount > 0){
+				countEndDate = getEndDateFromCount(
+					value.cronExpression,
+					value.endCount,
+					value.frequency,
+					value.repeat,
+					value.startDate,
+					value.repeatFor,
+					value.repeatForType,
+					value.skipFrom,
+					value.skipTo,
+					value.isFullWeek
+				)
+			}
 			if (schedule) {
 				data = {
 					...data,
 					...schedule,
 					isRepeatForDisabled: !value?.repeatFor || value?.repeatFor <= 1,
-					isAdditionalOptionsActive: (value?.skipFrom && value.skipTo)
+					isAdditionalOptionsActive: (value?.skipFrom && value.skipTo),
+					countEndDate
 				};
 			}
 		}
@@ -128,6 +144,39 @@ function RecurrenceComponent(props) {
 		state.minute,
 		state.months,
 	]);
+
+	useEffect(()=>{
+		let countEndDate = undefined
+		if(state.selectedEndType === END_TYPES.COUNT && state.endCount > 0) {
+			countEndDate = getEndDateFromCount(
+				state.cronExpression,
+				state.endCount,
+				state.frequency,
+				state.repeat,
+				state.startDate,
+				state.repeatFor,
+				state.repeatForType,
+				state.skipFrom,
+				state.skipTo,
+				state.isFullWeek
+			)
+		}
+		setStateData({countEndDate});
+
+
+	},[
+		state.selectedEndType,
+		state.cronExpression,
+		state.endCount,
+		state.frequency,
+		state.repeat,
+		state.startDate,
+		state.repeatFor,
+		state.repeatForType,
+		state.skipFrom,
+		state.skipTo,
+		state.isFullWeek
+	])
 
 	const setStateData = data => {
 		setState(prev => {

@@ -103,7 +103,7 @@ const commonArgs = {
         frequency: 3,
         // startDate: '2022-02-05',
         // endDate: '2022-07-05',
-        selectedEndType: 'noend',
+        selectedEndType: 'count',
         endCount: 10,
         cronExpression: '0 0 25 * ?',
         repeat: 'monthly',

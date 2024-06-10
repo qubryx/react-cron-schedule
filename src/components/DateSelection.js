@@ -1,13 +1,27 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 
 import css from './DateSelection.module.css';
 import { END_TYPES } from '../utils/constants';
+import { getDateWithZero, getMonthName, getWeekday } from '../utils/dateUtils';
 
 function DateSelection(props) {
 	const {disabled = false, styles = {}, value = {}, setValue, state = {}, setState} = props;
-	const {selectedEndType, startDate, endDate, endCount} = state;
+	const {selectedEndType, startDate, endDate, endCount, countEndDate} = state;
+	const [countEndDateText, setCountEndDateText] = useState("")
+
+	useEffect(()=>{
+		let text = ""
+		if(countEndDate){
+			const dateObj = new Date(countEndDate);
+			const weekDay = getWeekday(countEndDate);
+			const monthName = getMonthName(countEndDate);
+			const date = getDateWithZero(countEndDate);
+			text = `${weekDay}, ${date} ${monthName} ${dateObj.getFullYear()}`;
+		}
+		setCountEndDateText(text)
+	},[countEndDate])
 
 	const handleEndTypeChange = event => {
 		setValue({selectedEndType: event?.target?.value});
@@ -77,6 +91,9 @@ function DateSelection(props) {
 					</>
 				) : null}
 			</div>
+			{ selectedEndType === END_TYPES.COUNT && countEndDate &&
+				<div className={css.countEndDate}>{`Ends on ${countEndDateText}`}</div>
+			}
 		</div>
 	);
 }

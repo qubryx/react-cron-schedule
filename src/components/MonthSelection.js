@@ -55,7 +55,7 @@ function MonthSelection(props) {
 			{name: 'Weekday', value: MONTH_DAY_TYPES.WEEKDAY},
 			{name: 'Full week', value: MONTH_DAY_TYPES.FULL_WEEK},
 			{name: 'Full working week', value: MONTH_DAY_TYPES.FULL_WORKING_WEEK},
-			{name: 'Select days manually', value: MONTH_DAY_TYPES.SELECT_DAYS_MANUALLY},
+			{name: 'Multiple Days', value: MONTH_DAY_TYPES.SELECT_DAYS_MANUALLY},
 		]
 		return options;
 	};
