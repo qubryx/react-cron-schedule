@@ -2,13 +2,13 @@ import React, { useEffect, useState } from 'react';
 import Select from 'react-select';
 
 import css from './Frequency.module.css';
-import {MONTHS, REPEAT_OPTIONS} from '../utils/constants';
+import {END_TYPES, MONTHS, REPEAT_OPTIONS} from '../utils/constants';
 
 const repeatOptions = [REPEAT_OPTIONS.WEEKLY, REPEAT_OPTIONS.MONTHLY, REPEAT_OPTIONS.YEARLY];
 
 function Frequency(props) {
 	const {disabled = false, styles = {}, setValue, state = {}, setState} = props;
-	const {months, repeat, frequency} = state;
+	const {months, repeat, frequency, isFullWeek} = state;
   const [monthOptions, setMonthOptions] = useState([])
   const [selectedMonths, setSelectedMonths] = useState([])
 
@@ -33,7 +33,9 @@ function Frequency(props) {
       isRepeatForDisabled: true, 
       skipFrom: undefined,
       skipTo: undefined,
-      isAdditionalOptionsActive: false
+	  isFullWeek: val === REPEAT_OPTIONS.WEEKLY ? false : isFullWeek,
+      isAdditionalOptionsActive: false,
+	  selectedEndType: END_TYPES.NO_END
     });
 	};
 
