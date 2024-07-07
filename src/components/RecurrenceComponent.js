@@ -17,6 +17,7 @@ import RepeatFor from './RepeatFor';
 import AdditionalOptions from './AdditionalOptions';
 import { END_TYPES, MONTH_DAY_TYPES, MONTH_OPTIONS, ORDERS, REPEAT_OPTIONS } from '../utils/constants';
 import { getEndDateFromCount } from '../utils/parseCronExpression';
+import TimezoneSelection from './TimezoneSelection';
 
 const initialState = {
 	selectedWeeks: [new Date().getDay()], // [0,1,2,3,4,5,6]
@@ -42,6 +43,7 @@ const initialState = {
 	skipFrom: undefined,
 	skipTo: undefined,
 	isFullWeek: false,
+	timezone: Intl.DateTimeFormat().resolvedOptions()?.timeZone,
 };
 
 function RecurrenceComponent(props) {
@@ -67,7 +69,8 @@ function RecurrenceComponent(props) {
 					value.repeatForType,
 					value.skipFrom,
 					value.skipTo,
-					value.isFullWeek
+					value.isFullWeek,
+					value.timezone
 				)
 			}
 			if (schedule) {
@@ -158,12 +161,11 @@ function RecurrenceComponent(props) {
 				state.repeatForType,
 				state.skipFrom,
 				state.skipTo,
-				state.isFullWeek
+				state.isFullWeek,
+				state.timezone,
 			)
 		}
 		setStateData({countEndDate});
-
-
 	},[
 		state.selectedEndType,
 		state.cronExpression,
@@ -175,7 +177,8 @@ function RecurrenceComponent(props) {
 		state.repeatForType,
 		state.skipFrom,
 		state.skipTo,
-		state.isFullWeek
+		state.isFullWeek,
+		state.timezone
 	])
 
 	const setStateData = data => {
@@ -219,12 +222,13 @@ function RecurrenceComponent(props) {
 					/>
 				}
 				{!(state.selectedMonthDayOrder === ORDERS.LAST && state.monthOption === MONTH_OPTIONS.CUSTOM) &&
-				<RepeatFor {...props} setValue={setValue} state={state} setState={setStateData}/>
-}
+					<RepeatFor {...props} setValue={setValue} state={state} setState={setStateData}/>
+				}
 				</>
 			) : null}
 			<DateSelection {...props} setValue={setValue} state={state} setState={setStateData} />
 			<TimeSelection {...props} setValue={setValue} state={state} setState={setStateData} />
+			<TimezoneSelection {...props} setValue={setValue} state={state}/>
 			{(
 				(state?.repeat === REPEAT_OPTIONS.MONTHLY || state?.repeat === REPEAT_OPTIONS.YEARLY) &&
 				(state?.monthOption === MONTH_OPTIONS.STANDARD 

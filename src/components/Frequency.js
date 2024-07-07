@@ -77,6 +77,7 @@ function Frequency(props) {
 				</label>
 				{repeat === REPEAT_OPTIONS.YEARLY ? (
           <Select
+		  	isDisabled={disabled}
             value={selectedMonths}
             onChange={handleMonthChange}
             isMulti

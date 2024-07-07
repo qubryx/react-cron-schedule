@@ -11,15 +11,15 @@ export function getEndDateFromCount(
 	skipFrom = undefined,
 	skipTo = undefined,
 	isFullWeek = false,
+	timezone = Intl.DateTimeFormat().resolvedOptions()?.timeZone
 ) {
 	try {
-		const { timeZone } = Intl.DateTimeFormat().resolvedOptions();
 		startDate = startDate ? new Date(startDate) : startDate
 		const interval = parser.parseCronExpressions(cronExpression, {
             frequency: frequency,
             frequencyType: frequencyType,
             currentDate: startDate,
-            tz: timeZone,
+            tz: timezone,
 			repeatFor: repeatFor,
 			repeatType: repeatForType,
 			skipFrom: skipFrom,
