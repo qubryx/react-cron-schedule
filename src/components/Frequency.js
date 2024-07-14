@@ -2,13 +2,14 @@ import React, { useEffect, useState } from 'react';
 import Select from 'react-select';
 
 import css from './Frequency.module.css';
-import {END_TYPES, MONTHS, REPEAT_OPTIONS} from '../utils/constants';
+import {END_TYPES, MONTHS, MONTH_OPTIONS, REPEAT_OPTIONS} from '../utils/constants';
+import { getDaysInMonth } from '../utils/dateUtils';
 
 const repeatOptions = [REPEAT_OPTIONS.WEEKLY, REPEAT_OPTIONS.MONTHLY, REPEAT_OPTIONS.YEARLY];
 
 function Frequency(props) {
 	const {disabled = false, styles = {}, setValue, state = {}, setState} = props;
-	const {months, repeat, frequency, isFullWeek} = state;
+	const {months, repeat, frequency, isFullWeek, selectedMonthDate, monthOption} = state;
   const [monthOptions, setMonthOptions] = useState([])
   const [selectedMonths, setSelectedMonths] = useState([])
 
@@ -23,20 +24,28 @@ function Frequency(props) {
     setMonthOptions(options)
   },[months])
 
+
+
 	const handleRepeatClick = event => {
-    const val = event?.target?.value
+    	const val = event?.target?.value
 		setValue({
-      repeat: val,
-      frequency: val === REPEAT_OPTIONS.YEARLY ? 1 : Number(frequency),
-      repeatFor: undefined, 
-      repeatForType: undefined,
-      isRepeatForDisabled: true, 
-      skipFrom: undefined,
-      skipTo: undefined,
-	  isFullWeek: val === REPEAT_OPTIONS.WEEKLY ? false : isFullWeek,
-      isAdditionalOptionsActive: false,
-	  selectedEndType: END_TYPES.NO_END
-    });
+			repeat: val,
+			frequency: val === REPEAT_OPTIONS.YEARLY ? 1 : Number(frequency),
+			repeatFor: undefined, 
+			repeatForType: undefined,
+			isRepeatForDisabled: true, 
+			skipFrom: undefined,
+			skipTo: undefined,
+			isFullWeek: val === REPEAT_OPTIONS.WEEKLY ? false : isFullWeek,
+			isAdditionalOptionsActive: false,
+			selectedEndType: END_TYPES.NO_END,
+		});
+		if (val === REPEAT_OPTIONS.YEARLY && monthOption === MONTH_OPTIONS.STANDARD) {
+			const maxDayInMonth = getDaysInMonth(months)
+			if(selectedMonthDate > maxDayInMonth) {
+				setState({ selectedMonthDate: maxDayInMonth })
+			}
+		}
 	};
 
 	const handleFrequencyChange = event => {
@@ -45,7 +54,14 @@ function Frequency(props) {
 
 	const handleMonthChange = event => {
     if(event?.length === 0) return
-		setValue({months: event?.map(m => Number(m?.value))});
+		const val = event?.map(m => Number(m?.value))
+		setValue({months: val});
+		if (repeat === REPEAT_OPTIONS.YEARLY && monthOption === MONTH_OPTIONS.STANDARD) {
+			const maxDayInMonth = getDaysInMonth(val)
+			if(selectedMonthDate > maxDayInMonth) {
+				setState({ selectedMonthDate: maxDayInMonth })
+			}
+		}
 	};
 
 	return (

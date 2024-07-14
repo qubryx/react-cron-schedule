@@ -1,4 +1,4 @@
-import { MONTHS, WEEKDAYS_MAP } from "./constants";
+import { DAYS_IN_MONTH, MONTHS, WEEKDAYS_MAP } from "./constants";
 
 // date str format: YYYY-MM-DD
 export const getWeekday = (date) => {
@@ -16,4 +16,9 @@ export const getDateWithZero = (dateInput) =>  {
     const date = dateObj.getDate()  
     if (date > 9) return date
     return `0${date}`
+}
+
+export const getDaysInMonth = (monthArr = []) => {
+    const maxDayInMonth = monthArr.reduce((maxDays, month) => Math.max(maxDays, DAYS_IN_MONTH[month]), 0);
+	return maxDayInMonth
 }

@@ -1,20 +1,21 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import css from './MonthSelection.module.css';
-import {MONTH_DAY_TYPES, MONTH_OPTIONS, ORDERS, REPEAT_TYPES} from '../utils/constants';
+import {MONTH_DAY_TYPES, MONTH_OPTIONS, ORDERS, REPEAT_OPTIONS, REPEAT_TYPES} from '../utils/constants';
 import RepeatForDropdown from './RepeatForDropdown';
 import { setRepeatCountAndTypeVal } from '../utils/utils';
+import { getDaysInMonth } from '../utils/dateUtils';
 
-const daysArr = [...Array(32).keys()].filter(x => x !== 0);
 const OrderOptions = [ORDERS.FIRST, ORDERS.SECOND, ORDERS.THIRD, ORDERS.FOURTH, ORDERS.LAST];
 
 function MonthSelection(props) {
 	const {disabled = false, styles = {}, value = {}, setValue, state = {}, setState} = props;
 	const {
+		repeat,
+		months,
 		monthOption,
 		selectedMonthDate,
 		selectedMonthDay,
 		selectedMonthDayOrder,
-		repeatFor,
 		isRepeatForDisabled,
 		skipFrom,
 		skipTo,
@@ -60,6 +61,15 @@ function MonthSelection(props) {
 		return options;
 	};
 
+	const getRepeatForTypes = useCallback(() => {
+		let maxDayInMonth = 31 
+		if (repeat === REPEAT_OPTIONS.YEARLY && monthOption === MONTH_OPTIONS.STANDARD) {
+			maxDayInMonth = getDaysInMonth(months)
+		}
+		const daysArr = [...Array(maxDayInMonth+1).keys()].filter(x => x !== 0);
+        return daysArr 
+    },[repeat, months, monthOption])
+
 	return (
 		<div className={css.mainContainer} style={styles.monthContainer}>
 			<label className={css.onLabel} style={styles.onLabel}>
@@ -84,7 +94,7 @@ function MonthSelection(props) {
 						style={styles.dayDropdown}
 						onChange={handleMonthDateChange}
 					>
-						{daysArr.map(item => (
+						{getRepeatForTypes().map(item => (
 							<option key={item} value={item}>
 								{item}
 							</option>
