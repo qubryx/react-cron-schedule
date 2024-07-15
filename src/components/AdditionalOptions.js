@@ -16,11 +16,11 @@ function AdditionalOptions(props) {
     }
 
     const handleSkipFromChange = event => {
-        setState({skipFrom: Number(event?.target?.value)})
+        setValue({skipFrom: Number(event?.target?.value)})
     }
 
     const handleSkipToChange = event => {
-        setState({skipTo: Number(event?.target?.value)})
+        setValue({skipTo: Number(event?.target?.value)})
     }
 
     return (
@@ -46,7 +46,7 @@ function AdditionalOptions(props) {
                 <select
                     key="skipFrom"
                     disabled={disabled || !isAdditionalOptionsActive}
-                    value={skipFrom || 5}
+                    value={skipFrom === undefined ? 5 : skipFrom}
                     className={css.additionalOptionWeekDropdown}
                     style={styles.additionalOptionWeekDropdown}
                     onChange={handleSkipFromChange}
