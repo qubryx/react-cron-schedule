@@ -78,7 +78,7 @@ function RecurrenceComponent(props) {
 					...data,
 					...schedule,
 					isRepeatForDisabled: !value?.repeatFor || value?.repeatFor <= 1,
-					isAdditionalOptionsActive: (value?.skipFrom && value.skipTo),
+					isAdditionalOptionsActive: (value?.skipFrom !== undefined && value.skipTo !== undefined),
 					countEndDate
 				};
 			}

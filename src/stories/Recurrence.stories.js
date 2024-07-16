@@ -100,18 +100,14 @@ const Template = (args) => <Recurrence {...args} />;
 
 const commonArgs = {
     value: {
-        frequency: 3,
-        // startDate: '2022-02-05',
-        // endDate: '2022-07-05',
-        selectedEndType: 'count',
+        frequency: 1,
+        // startDate: "2024-07-14T18:30:00.000Z",
         endCount: 10,
-        cronExpression: '0 0 25 * ?',
         repeat: 'monthly',
-
-        cronExpression: ['0 0 20 * ?'],
-        repeatFor: 4,
-        repeatForType: 'workingDays',
-        timezone: 'America/Chicago'
+        cronExpression: ['0 0 1 * ?'],
+        timezone: 'Asia/Kolkata',
+        skipFrom: 0,
+        skipTo: 1,
     },
     disabled: false,
     showCronExpression: false,
