@@ -87,5 +87,10 @@ export const END_TYPES = {
 export const REPEAT_OPTIONS = {
 	YEARLY: 'yearly',
 	MONTHLY: 'monthly',
-	WEEKLY: 'weekly'
+	WEEKLY: 'weekly',
+	SEMI_ANNUAL: 'semi-annual',
+	MONTHLY: 'monthly',
+	BI_MONTHLY: 'bi-monthly',
+	QUARTERLY: 'quarterly',
+	BI_WEEKLY: 'bi-weekly'
 }

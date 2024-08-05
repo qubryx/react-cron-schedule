@@ -4,12 +4,33 @@ import Select from 'react-select';
 import css from './Frequency.module.css';
 import {END_TYPES, MONTHS, MONTH_OPTIONS, REPEAT_OPTIONS} from '../utils/constants';
 import { getDaysInMonth } from '../utils/dateUtils';
+import { getRepeatFromFreqType } from '../utils/utils';
 
-const repeatOptions = [REPEAT_OPTIONS.WEEKLY, REPEAT_OPTIONS.MONTHLY, REPEAT_OPTIONS.YEARLY];
+const repeatOptions = [
+	{value: REPEAT_OPTIONS.WEEKLY, label: 'Weekly'},
+	{value: REPEAT_OPTIONS.BI_WEEKLY, label: 'Bi-Weekly'},
+	{value: REPEAT_OPTIONS.MONTHLY, label: 'Monthly'},
+	{value: REPEAT_OPTIONS.BI_MONTHLY, label: 'Bi-Monthly'},
+	{value: REPEAT_OPTIONS.QUARTERLY, label: 'Quaterly'},
+	{value: REPEAT_OPTIONS.SEMI_ANNUAL, label: 'Semi Annual'},
+	{value: REPEAT_OPTIONS.YEARLY, label: 'Annual'},
+];
+
+const freqCountMap = {
+	[REPEAT_OPTIONS.WEEKLY]: 1,
+	[REPEAT_OPTIONS.BI_WEEKLY]: 2,
+	[REPEAT_OPTIONS.MONTHLY]: 1,
+	[REPEAT_OPTIONS.BI_MONTHLY]: 2,
+	[REPEAT_OPTIONS.QUARTERLY]: 3,
+	[REPEAT_OPTIONS.SEMI_ANNUAL]: 6,
+	[REPEAT_OPTIONS.YEARLY]: 1,
+}
+
+const FreqCountDefinedTypes = [REPEAT_OPTIONS.BI_WEEKLY, REPEAT_OPTIONS.BI_MONTHLY, REPEAT_OPTIONS.QUARTERLY, REPEAT_OPTIONS.SEMI_ANNUAL]
 
 function Frequency(props) {
 	const {disabled = false, styles = {}, setValue, state = {}, setState} = props;
-	const {months, repeat, frequency, isFullWeek, selectedMonthDate, monthOption} = state;
+	const {months, repeat, frequency, frequencyType, isFullWeek, selectedMonthDate, monthOption} = state;
   const [monthOptions, setMonthOptions] = useState([])
   const [selectedMonths, setSelectedMonths] = useState([])
 
@@ -27,20 +48,21 @@ function Frequency(props) {
 
 
 	const handleRepeatClick = event => {
-    	const val = event?.target?.value
+    	const freqType = event?.target?.value
 		setValue({
-			repeat: val,
-			frequency: val === REPEAT_OPTIONS.YEARLY ? 1 : Number(frequency),
+			repeat: getRepeatFromFreqType(freqType),
+			frequency: freqCountMap[freqType],
 			repeatFor: undefined, 
 			repeatForType: undefined,
 			isRepeatForDisabled: true, 
 			skipFrom: undefined,
 			skipTo: undefined,
-			isFullWeek: val === REPEAT_OPTIONS.WEEKLY ? false : isFullWeek,
+			isFullWeek: [REPEAT_OPTIONS.WEEKLY, REPEAT_OPTIONS.BI_WEEKLY].includes(freqType) ? false : isFullWeek,
 			isAdditionalOptionsActive: false,
 			selectedEndType: END_TYPES.NO_END,
 		});
-		if (val === REPEAT_OPTIONS.YEARLY && monthOption === MONTH_OPTIONS.STANDARD) {
+		setState({frequencyType: freqType})
+		if (freqType === REPEAT_OPTIONS.YEARLY && monthOption === MONTH_OPTIONS.STANDARD) {
 			const maxDayInMonth = getDaysInMonth(months)
 			if(selectedMonthDate > maxDayInMonth) {
 				setState({ selectedMonthDate: maxDayInMonth })
@@ -74,46 +96,49 @@ function Frequency(props) {
 					key="repeat"
 					style={styles.repeatDropdown}
 					disabled={disabled}
-					value={repeat}
+					value={frequencyType}
 					className={css.repeatDropdown}
 					name="repeat"
 					id="repeat"
 					onChange={handleRepeatClick}
 				>
 					{repeatOptions.map(item => (
-						<option key={item} value={item}>
-							{item}
+						<option key={item.value} value={item.value}>
+							{item.label}
 						</option>
 					))}
 				</select>
 			</div>
 			<div className={css.frequencyContainer} style={styles.frequencyContainer}>
-				<label className={css.everyLabel} style={styles.everyLabel}>
-					Every
-				</label>
-				{repeat === REPEAT_OPTIONS.YEARLY ? (
-          <Select
-		  	isDisabled={disabled}
-            value={selectedMonths}
-            onChange={handleMonthChange}
-            isMulti
-            name="months"
-            options={monthOptions}
-            required
-            closeMenuOnSelect={false}
-            isClearable={false}
-            styles={{
-              control: (baseStyles, state) => ({
-                ...baseStyles,
-                maxWidth: 300,
-                border: 'none',
-                borderBottom: '1px dotted',
-                borderRadius: 0,
-                marginTop: -10
-              }),
-            }}
-          />
-				) : (
+				{!FreqCountDefinedTypes.includes(frequencyType) && (
+					<label className={css.everyLabel} style={styles.everyLabel}>
+						Every
+					</label>
+				)}
+				{repeat === REPEAT_OPTIONS.YEARLY && (
+					<Select
+						isDisabled={disabled}
+						value={selectedMonths}
+						onChange={handleMonthChange}
+						isMulti
+						name="months"
+						options={monthOptions}
+						required
+						closeMenuOnSelect={false}
+						isClearable={false}
+						styles={{
+							control: (baseStyles, state) => ({
+								...baseStyles,
+								maxWidth: 300,
+								border: 'none',
+								borderBottom: '1px dotted',
+								borderRadius: 0,
+								marginTop: -10
+							}),
+						}}
+					/>
+				)} 
+				{repeat !== REPEAT_OPTIONS.YEARLY && !FreqCountDefinedTypes.includes(frequencyType) && (
 					<>
 						<input
 							style={styles.frequencyInput}

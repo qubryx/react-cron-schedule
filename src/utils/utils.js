@@ -1,4 +1,4 @@
-import { MONTH_DAY_TYPES, MONTH_OPTIONS, ORDERS, REPEAT_TYPES } from "./constants"
+import { MONTH_DAY_TYPES, MONTH_OPTIONS, ORDERS, REPEAT_OPTIONS, REPEAT_TYPES } from "./constants"
 
 export const setRepeatCountAndTypeVal = (
     setValue,
@@ -55,4 +55,21 @@ export const setRepeatCountAndTypeVal = (
         setValue ({ skipFrom: undefined, skipTo: undefined })
         setState({ isAdditionalOptionsActive: false })
     }
+}
+
+export const getFrequencyType = (repeat, frequency) => {
+    if (repeat === REPEAT_OPTIONS.WEEKLY){
+        if (frequency === 2) return REPEAT_OPTIONS.BI_WEEKLY
+    } else if (repeat === REPEAT_OPTIONS.MONTHLY) {
+        if (frequency === 2) return REPEAT_OPTIONS.BI_MONTHLY
+        else if (frequency === 3) return REPEAT_OPTIONS.QUARTERLY
+        else if (frequency === 6) return REPEAT_OPTIONS.SEMI_ANNUAL
+    }
+    return repeat
+}
+
+export const getRepeatFromFreqType = (freqType) => {
+    if ([REPEAT_OPTIONS.BI_WEEKLY].includes(freqType)) return REPEAT_OPTIONS.WEEKLY
+    else if ([REPEAT_OPTIONS.BI_MONTHLY, REPEAT_OPTIONS.QUARTERLY, REPEAT_OPTIONS.SEMI_ANNUAL].includes(freqType)) return REPEAT_OPTIONS.MONTHLY
+    return freqType
 }

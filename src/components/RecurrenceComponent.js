@@ -18,6 +18,7 @@ import AdditionalOptions from './AdditionalOptions';
 import { END_TYPES, MONTH_DAY_TYPES, MONTH_OPTIONS, ORDERS, REPEAT_OPTIONS } from '../utils/constants';
 import { getEndDateFromCount } from '../utils/parseCronExpression';
 import TimezoneSelection from './TimezoneSelection';
+import { getFrequencyType } from '../utils/utils';
 
 const initialState = {
 	selectedWeeks: [new Date().getDay()], // [0,1,2,3,4,5,6]
@@ -31,6 +32,7 @@ const initialState = {
 	startDate: new Date(),
 	endDate: new Date(),
 	repeat: REPEAT_OPTIONS.WEEKLY,
+	frequencyType: REPEAT_OPTIONS.WEEKLY,
 	frequency: 1,
 	repeatFor: undefined, 
 	repeatForType: undefined,
@@ -79,7 +81,8 @@ function RecurrenceComponent(props) {
 					...schedule,
 					isRepeatForDisabled: !value?.repeatFor || value?.repeatFor <= 1,
 					isAdditionalOptionsActive: (value?.skipFrom !== undefined && value.skipTo !== undefined),
-					countEndDate
+					frequencyType: getFrequencyType(value.repeat, value.frequency),
+					countEndDate,
 				};
 			}
 		}

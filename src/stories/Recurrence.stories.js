@@ -100,7 +100,7 @@ const Template = (args) => <Recurrence {...args} />;
 
 const commonArgs = {
     value: {
-        frequency: 1,
+        frequency: 6,
         // startDate: "2024-07-14T18:30:00.000Z",
         endCount: 10,
         repeat: 'monthly',
