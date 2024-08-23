@@ -81,7 +81,8 @@ function RecurrenceComponent(props) {
 					...schedule,
 					isRepeatForDisabled: !value?.repeatFor || value?.repeatFor <= 1,
 					isAdditionalOptionsActive: (value?.skipFrom !== undefined && value.skipTo !== undefined),
-					frequencyType: getFrequencyType(value.repeat, value.frequency),
+					frequencyType: value.repeat,
+					// frequencyType: getFrequencyType(value.repeat, value.frequency),
 					countEndDate,
 				};
 			}

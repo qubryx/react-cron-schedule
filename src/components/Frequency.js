@@ -8,12 +8,8 @@ import { getRepeatFromFreqType } from '../utils/utils';
 
 const repeatOptions = [
 	{value: REPEAT_OPTIONS.WEEKLY, label: 'Weekly'},
-	{value: REPEAT_OPTIONS.BI_WEEKLY, label: 'Bi-Weekly'},
 	{value: REPEAT_OPTIONS.MONTHLY, label: 'Monthly'},
-	{value: REPEAT_OPTIONS.BI_MONTHLY, label: 'Bi-Monthly'},
-	{value: REPEAT_OPTIONS.QUARTERLY, label: 'Quaterly'},
-	{value: REPEAT_OPTIONS.SEMI_ANNUAL, label: 'Semi Annual'},
-	{value: REPEAT_OPTIONS.YEARLY, label: 'Annual'},
+	{value: REPEAT_OPTIONS.YEARLY, label: 'Yearly'},
 ];
 
 const freqCountMap = {

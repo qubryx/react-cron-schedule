@@ -89,7 +89,6 @@ export const REPEAT_OPTIONS = {
 	MONTHLY: 'monthly',
 	WEEKLY: 'weekly',
 	SEMI_ANNUAL: 'semi-annual',
-	MONTHLY: 'monthly',
 	BI_MONTHLY: 'bi-monthly',
 	QUARTERLY: 'quarterly',
 	BI_WEEKLY: 'bi-weekly'
