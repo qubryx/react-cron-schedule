@@ -53,7 +53,7 @@ export default App;
 
 ### value props
 
-value prop can be used to pass default values
+value prop can be used to pass default values 
 
 | Names  | Type           | Default | Description | Mandatory |
 | ------ | -------------- |---------|-------------| --------- |
